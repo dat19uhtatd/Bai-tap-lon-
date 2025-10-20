@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Lịch Học</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/trangchu.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="images/Screenshot 2025-10-18 003652.png" alt="Logo">
+                </div>
+                <h2>QL Lịch Học</h2>
+            </div>
+            <ul class="menu">
+                <li class="active" onclick="switchMainTab('dashboard', this)">
+                    <img src="images/home-icon.png" alt="Trang chủ" class="menu-icon-img">
+                    <span>Trang chủ</span>
+                </li>
+                <li onclick="switchMainTab('schedule', this)">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Thời khóa biểu</span>
+                </li>
+                <li onclick="switchMainTab('assignments', this)">
+                    <img src="images/homework-icon.png" alt="Bài tập" class="menu-icon-img">
+                    <span>Bài tập</span>
+                </li>
+                <li onclick="switchMainTab('statistics', this)">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Thống kê</span>
+                </li>
+                <li onclick="switchMainTab('settings', this)">
+                    <i class="fas fa-cog"></i>
+                    <span>Cài đặt</span>
+                </li>
+            </ul>
+            <a href="dangnhap.html" target="_self">
+                <button class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                </button>
+            </a>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <h1 id="main-title-text">👋 Hello, I'm Dat!</h1>
+                    <p class="typing-effect" id="typing-subtitle">Welcome to my timetable! 🚀</p>
+                </div>
+                <button class="add-schedule-btn" id="add-schedule-btn" onclick="openModal()">
+                    <i class="fas fa-plus"></i> Thêm Lịch
+                </button>
+            </header>
+
+            <div class="content">
+                <!-- Dashboard Tab -->
+                <div id="dashboard" class="tab-content active">
+                    <div class="notification-form">
+                        <h3><i class="fas fa-bell"></i> Thêm Thông Báo Mới</h3>
+                        <div class="form-grid">
+                            <input type="text" id="notifTitle" placeholder="Tiêu đề thông báo">
+                            <input type="date" id="notifDate">
+                            <button onclick="addNotification()">
+                                <i class="fas fa-plus-circle"></i> Thêm Thông Báo
+                            </button>
+                        </div>
+                    </div>
+                    <div class="notifications-grid" id="notificationsList"></div>
+                </div>
+
+                <!-- Schedule Tab -->
+                <div id="schedule" class="tab-content">
+                    <div class="timetable-wrapper">
+                        <table class="timetable">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-clock"></i> Giờ học</th>
+                                    <th><i class="fas fa-calendar-day"></i> Thứ 2</th>
+                                    <th><i class="fas fa-calendar-day"></i> Thứ 3</th>
+                                    <th><i class="fas fa-calendar-day"></i> Thứ 4</th>
+                                    <th><i class="fas fa-calendar-day"></i> Thứ 5</th>
+                                    <th><i class="fas fa-calendar-day"></i> Thứ 6</th>
+                                    <th><i class="fas fa-calendar-day"></i> Thứ 7</th>
+                                    <th><i class="fas fa-calendar-day"></i> Chủ nhật</th>
+                                </tr>
+                            </thead>
+                            <tbody id="scheduleBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Assignments Tab -->
+                <div id="assignments" class="tab-content">
+                    <div class="assignment-form">
+                        <h3><i class="fas fa-pencil-alt"></i> Thêm Bài Tập Mới</h3>
+                        <div class="form-grid">
+                            <input type="text" id="assignSubject" placeholder="Môn học">
+                            <input type="text" id="assignTitle" placeholder="Tên bài tập">
+                            <input type="date" id="assignDeadline">
+                            <button onclick="addAssignment()">
+                                <i class="fas fa-plus-circle"></i> Thêm
+                            </button>
+                        </div>
+                    </div>
+                    <div class="assignments-grid" id="assignmentsList"></div>
+                </div>
+
+                <!-- Statistics Tab -->
+                <div id="statistics" class="tab-content">
+                    <div style="text-align: center; padding: 50px;">
+                        <h2><i class="fas fa-chart-pie"></i> Thống kê</h2>
+                        <p>Chức năng đang phát triển...</p>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="settings" class="tab-content">
+                    <div class="profile-section">
+                        <div class="profile-avatar" id="userAvatar">D</div>
+                        <div class="profile-name" id="userName">Đạt Phan Tiến</div>
+                        <div class="profile-email" id="userEmail">dat241230701@lms.utc.edu.vn</div>
+                        <div class="profile-role">
+                            <i class="fas fa-user-graduate"></i> Sinh viên
+                        </div>
+                    </div>
+
+                    <div class="section-header">Tài khoản</div>
+                    <div class="menu-list">
+                        <div class="menu-item" onclick="toggleNotificationSetting()">
+                            <div class="menu-icon icon-purple">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <div class="menu-content">
+                                <span class="menu-text">Nhận thông báo</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="notificationToggle" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="menu-item" onclick="changeLanguage()">
+                            <div class="menu-icon icon-orange">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <div class="menu-content">
+                                <span class="menu-text">Ngôn ngữ</span>
+                                <i class="fas fa-chevron-right menu-arrow"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-header">Khác</div>
+                    <div class="menu-list">
+                        <div class="menu-item" onclick="showAbout()">
+                            <div class="menu-icon icon-blue">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="menu-content">
+                                <span class="menu-text">Giới thiệu</span>
+                                <i class="fas fa-chevron-right menu-arrow"></i>
+                            </div>
+                        </div>
+                        <div class="menu-item" onclick="showTerms()">
+                            <div class="menu-icon icon-gray">
+                                <i class="fas fa-file-contract"></i>
+                            </div>
+                            <div class="menu-content">
+                                <span class="menu-text">Điều khoản & chính sách</span>
+                                <i class="fas fa-chevron-right menu-arrow"></i>
+                            </div>
+                        </div>
+                        <div class="menu-item" onclick="logoutFromSettings()">
+                            <div class="menu-icon icon-red">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </div>
+                            <div class="menu-content">
+                                <span class="menu-text">Đăng xuất</span>
+                                <i class="fas fa-chevron-right menu-arrow"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="version">Phiên bản 1.0.7</div>
+                </div>
+            </div>
+
+            <!-- Modal thêm lịch -->
+            <div class="modal" id="addModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2><i class="fas fa-calendar-plus"></i> Thêm Lịch Học</h2>
+                        <button class="close-btn" onclick="closeModal()">×</button>
+                    </div>
+                    <form onsubmit="addClass(event)">
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar-week"></i> Thứ</label>
+                            <select id="classDay" required>
+                                <option>Thứ 2</option>
+                                <option>Thứ 3</option>
+                                <option>Thứ 4</option>
+                                <option>Thứ 5</option>
+                                <option>Thứ 6</option>
+                                <option>Thứ 7</option>
+                                <option>Chủ nhật</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-clock"></i> Giờ học</label>
+                            <select id="classTime" required>
+                                <option>07:00 - 08:30</option>
+                                <option>08:45 - 10:15</option>
+                                <option>10:30 - 12:00</option>
+                                <option>13:00 - 14:30</option>
+                                <option>14:45 - 16:15</option>
+                                <option>16:30 - 18:00</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-book"></i> Môn học</label>
+                            <input type="text" id="classSubject" required placeholder="VD: Toán">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-door-open"></i> Phòng học</label>
+                            <input type="text" id="classRoom" required placeholder="VD: A101">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-chalkboard-teacher"></i> Giáo viên</label>
+                            <input type="text" id="classTeacher" placeholder="VD: Nguyễn Văn A">
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-check-circle"></i> Thêm Lịch
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="java/trangchu.js"></script>
+</body>
+</html>

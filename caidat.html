@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Trang Cá Nhân</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        /* Container chính cho trang cá nhân */
+        #settings {
+            display: none;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        #settings.active {
+            display: block;
+        }
+
+        /* Profile Section */
+        .profile-section {
+            background-color: #fff;
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 8px solid #f5f5f5;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 32px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .profile-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .profile-email {
+            font-size: 14px;
+            color: #95a5a6;
+            margin-bottom: 4px;
+        }
+
+        .profile-role {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+
+        /* Section Headers */
+        .section-header {
+            background-color: #f5f5f5;
+            padding: 8px 16px;
+            font-size: 13px;
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Menu Items */
+        .menu-list {
+            background-color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            background-color: #fff;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item:active {
+            background-color: #f8f8f8;
+        }
+
+        .menu-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 18px;
+            color: #fff;
+        }
+
+        .icon-purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .icon-orange { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .icon-blue { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .icon-gray { background: linear-gradient(135deg, #a8a8a8 0%, #8c8c8c 100%); }
+
+        .menu-content {
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .menu-text {
+            font-size: 16px;
+            color: #2c3e50;
+        }
+
+        .menu-arrow {
+            color: #bdc3c7;
+            font-size: 16px;
+        }
+
+        .menu-toggle {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            width: 51px;
+            height: 31px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #4cd964;
+            transition: 0.3s;
+            border-radius: 31px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 27px;
+            width: 27px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        input:not(:checked) + .slider {
+            background-color: #e0e0e0;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Version */
+        .version {
+            text-align: right;
+            padding: 16px;
+            color: #95a5a6;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        /* Back Button */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #fff;
+            border: none;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #f0f0f0;
+            transform: scale(1.1);
+        }
+
+        .back-button i {
+            font-size: 18px;
+            color: #2c3e50;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .profile-section {
+                padding: 30px 15px;
+            }
+            
+            .back-button {
+                top: 15px;
+                left: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Trang Cá Nhân - Tab Content -->
+    <div id="settings" class="tab-content">
+        <button class="back-button" onclick="switchMainTab('dashboard')">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+
+        <div class="profile-section">
+            <div class="profile-avatar" id="userAvatar">D</div>
+            <div class="profile-name" id="userName">Đạt Phan Tiến</div>
+            <div class="profile-email" id="userEmail">dat241230701@lms.utc.edu.vn</div>
+            <div class="profile-role">Sinh viên</div>
+        </div>
+
+        <div class="section-header">Tài khoản</div>
+        <div class="menu-list">
+            <div class="menu-item" onclick="toggleNotification()">
+                <div class="menu-icon icon-purple">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="menu-content">
+                    <span class="menu-text">Nhận thông báo</span>
+                    <div class="menu-toggle">
+                        <label class="switch">
+                            <input type="checkbox" id="notificationToggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-item" onclick="changeLanguage()">
+                <div class="menu-icon icon-orange">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div class="menu-content">
+                    <span class="menu-text">Ngôn ngữ</span>
+                    <i class="fas fa-chevron-right menu-arrow"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header">Khác</div>
+        <div class="menu-list">
+            <div class="menu-item" onclick="showAbout()">
+                <div class="menu-icon icon-blue">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <div class="menu-content">
+                    <span class="menu-text">Giới thiệu</span>
+                    <i class="fas fa-chevron-right menu-arrow"></i>
+                </div>
+            </div>
+
+            <div class="menu-item" onclick="showTerms()">
+                <div class="menu-icon icon-gray">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div class="menu-content">
+                    <span class="menu-text">Điều khoản & chính sách</span>
+                    <i class="fas fa-chevron-right menu-arrow"></i>
+                </div>
+            </div>
+
+            <div class="menu-item" onclick="logout()">
+                <div class="menu-icon" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+                <div class="menu-content">
+                    <span class="menu-text">Đăng xuất</span>
+                    <i class="fas fa-chevron-right menu-arrow"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="version">Phiên bản 1.0.7</div>
+    </div>
+
+    <script>
+        // Lấy thông tin user từ localStorage
+        function loadUserInfo() {
+            const userInfo = {
+                name: localStorage.getItem('userName') || 'Đạt Phan Tiến',
+                email: localStorage.getItem('userEmail') || 'dat241230701@lms.utc.edu.vn',
+                role: localStorage.getItem('userRole') || 'Sinh viên'
+            };
+
+            document.getElementById('userName').textContent = userInfo.name;
+            document.getElementById('userEmail').textContent = userInfo.email;
+            
+            const firstLetter = userInfo.name.charAt(0).toUpperCase();
+            document.getElementById('userAvatar').textContent = firstLetter;
+        }
+
+        // Hàm toggle notification
+        function toggleNotification() {
+            const toggle = document.getElementById('notificationToggle');
+            const isEnabled = toggle.checked;
+            localStorage.setItem('notificationEnabled', isEnabled);
+            
+            const message = isEnabled ? 'Đã bật thông báo' : 'Đã tắt thông báo';
+            showToast(message);
+        }
+
+        // Hàm đổi ngôn ngữ
+        function changeLanguage() {
+            const languages = ['🇻🇳 Tiếng Việt', '🇬🇧 English', '🇨🇳 中文'];
+            const choice = prompt('Chọn ngôn ngữ:\n1. ' + languages[0] + '\n2. ' + languages[1] + '\n3. ' + languages[2]);
+            
+            if (choice) {
+                const lang = languages[parseInt(choice) - 1];
+                if (lang) {
+                    localStorage.setItem('language', lang);
+                    showToast('Đã chọn: ' + lang);
+                }
+            }
+        }
+
+        // Hàm giới thiệu
+        function showAbout() {
+            alert('📱 Ứng dụng Quản lý Học tập\n\n' +
+                  '✨ Phiên bản: 1.0.7\n' +
+                  '📅 Năm phát hành: 2025\n' +
+                  '🏫 Trường: UTC\n\n' +
+                  '© 2025 All rights reserved');
+        }
+
+        // Hàm điều khoản
+        function showTerms() {
+            alert('📋 Điều khoản sử dụng và Chính sách bảo mật\n\n' +
+                  '1. Bảo mật thông tin cá nhân\n' +
+                  '2. Sử dụng dữ liệu hợp pháp\n' +
+                  '3. Tuân thủ quy định nhà trường\n\n' +
+                  'Vui lòng đọc kỹ trước khi sử dụng ứng dụng.');
+        }
+
+        // Hàm đăng xuất
+        function logout() {
+            if (confirm('🚪 Bạn có chắc chắn muốn đăng xuất?')) {
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('isLoggedIn');
+                
+                showToast('✓ Đã đăng xuất thành công!');
+                
+                setTimeout(() => {
+                    switchMainTab('dashboard');
+                }, 1000);
+            }
+        }
+
+        // Hàm hiển thị thông báo toast
+        function showToast(message) {
+            const existingToast = document.querySelector('.toast-notification');
+            if (existingToast) {
+                existingToast.remove();
+            }
+
+            const toast = document.createElement('div');
+            toast.className = 'toast-notification';
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 30px;
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: #2c3e50;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 25px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 10000;
+                animation: slideUp 0.3s ease;
+                font-size: 14px;
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideDown 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+
+        // Thêm CSS cho animation toast
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideUp {
+                from {
+                    transform: translateX(-50%) translateY(100px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(-50%) translateY(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideDown {
+                from {
+                    transform: translateX(-50%) translateY(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(-50%) translateY(100px);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Load thông tin user khi trang được tải
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserInfo();
+            
+            const savedNotification = localStorage.getItem('notificationEnabled');
+            if (savedNotification !== null) {
+                document.getElementById('notificationToggle').checked = savedNotification === 'true';
+            }
+        });
+
+        // DEMO: Hàm để set thông tin user từ trang đăng nhập
+        function setUserInfo(name, email, role) {
+            localStorage.setItem('userName', name);
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('userRole', role);
+            localStorage.setItem('isLoggedIn', 'true');
+            loadUserInfo();
+        }
+
+        // Hàm chuyển tab (cần có sẵn trong file chính)
+        function switchMainTab(tabId, element) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            const targetTab = document.getElementById(tabId);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+            
+            if (element) {
+                document.querySelectorAll('.menu li').forEach(li => li.classList.remove('active'));
+                element.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
